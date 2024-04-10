@@ -7,7 +7,9 @@ CREATE TABLE "users" (
 
 CREATE TABLE "followers" (
   "follower_id" bigint NOT NULL,
-  "following_id" bigint NOT NULL
+  "following_id" bigint NOT NULL,
+
+  unique ("follower_id", "following_id")
 );
 
 ALTER TABLE "followers" ADD FOREIGN KEY ("follower_id") REFERENCES "users" ("id");
