@@ -31,3 +31,14 @@ services:
       timeout: 10s
       retries: 5
   
+
+  instagram-stories-service:
+    build: .
+    container_name: instagram-stories-service
+    ports:
+      - 3000:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy

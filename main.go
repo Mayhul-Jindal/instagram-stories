@@ -10,12 +10,13 @@ import (
 	"github.com/go-playground/validator"
 )
 
+// can be moved to .env file
 const (
 	symmetricKey  = "12345678901234567890123456789012"
-	postgresURL   = "postgresql://postgres:postgres@localhost:5432/instagram-stories?sslmode=disable"
+	postgresURL   = "postgresql://postgres:postgres@postgres:5432/instagram-stories?sslmode=disable"
 	tokenDuration = 1 * time.Hour
 	listenAddr    = ":3000"
-	mondodbURL = "mongodb://mongo:mongo@localhost:27017"
+	mondodbURL = "mongodb://mongo:mongo@mongodb:27017"
 )
 
 func main() {
