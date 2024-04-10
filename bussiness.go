@@ -125,6 +125,7 @@ func (b *bussiness) CreateStory(ctx context.Context, userID int64, data string, 
 	followers = append(followers, userID)
 
 	err = b.mongo.UpdateTimelineOfFollowers(ctx, followers, mongodb.UserTimelineData{
+		UserID:    userID,
 		StoryID:   storyID,
 		CreatedAt: date,
 	})

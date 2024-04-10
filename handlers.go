@@ -185,7 +185,7 @@ func (a *api) getStoriesTimeline(w http.ResponseWriter, r *http.Request) (any, e
 
 type WatchStoryRequest struct {
 	UserID  int64 `json:"user_id" validate:"required,number,min=1"`
-	StoryID string `json:"story_id" validate:"required,number,min=1"`
+	StoryID string `json:"story_id" validate:"required,min=1"`
 }
 
 func (a *api) watchStory(w http.ResponseWriter, r *http.Request) (any, error) {

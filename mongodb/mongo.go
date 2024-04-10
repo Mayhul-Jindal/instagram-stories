@@ -85,6 +85,7 @@ func (m *mongodb) GetStoryById(ctx context.Context, storyID primitive.ObjectID) 
 const TimelineCollection = "TimelineCollection"
 
 type UserTimelineData struct {
+	UserID int64              `bson:"user_id,omitempty"`
 	StoryID   primitive.ObjectID `bson:"story_id,omitempty"`
 	CreatedAt time.Time          `bson:"created_at,omitempty"`
 }
@@ -142,10 +143,13 @@ func (m *mongodb) RemoveStoryFromUserTimeline(ctx context.Context, userID int64,
 
 	resp, err := m.db.Collection(TimelineCollection).UpdateOne(ctx, filter, update)
 	if err != nil {
-		return resp.MatchedCount, err
+		return 0, err
 	}
 
-	return resp.MatchedCount, nil
+	log.Printf("Removed %d documents\n", resp.ModifiedCount)
+	log.Println("matched count", resp.MatchedCount)
+
+	return resp.ModifiedCount, nil
 }
 
 // for debugging purposes

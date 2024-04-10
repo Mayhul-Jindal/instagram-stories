@@ -1,9 +1,7 @@
 # Design decisions
-
 - `No frameworks` are used to make the service for example gin. Mainly `databse drivers` and lightweight http router `chi` is used 
 
 - `Seperation of concern` is kept in mind and thus different componenets in this service can be even further breakdown into multiple microservices. Mainly `ports and adapter pattern` is used and as some compoenets abide a interface, I can add `onion layers` on top of that (basicaaly `dependency injection`)
-
 
 - `Structured logging` is used to log the events and errors.
 
@@ -17,7 +15,4 @@
 # Steps to run
 - `docker-compose up` to start the services
 - `docker-compose ps` to check health status of the services
-
-
-## Todo
-- redis for timeline
+- Use this [postman](https://www.postman.com/mission-physicist-26981670/workspace/instagram-stories) collection to test the service
