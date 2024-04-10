@@ -34,3 +34,16 @@ type FollowUserRequest struct {
 	Email  string `json:"email" validate:"required,email"`
 }
 
+type CreateStoryRequest struct {
+	UserID int64  `json:"user_id" validate:"required,number,min=1"`
+	Data   string `json:"data" validate:"required,min=5"`
+}
+
+type GetStoriesTimelineRequest struct {
+	UserID int64 `json:"user_id" validate:"required,number,min=1"`
+}
+
+type WatchStoryRequest struct {
+	UserID  int64  `json:"user_id" validate:"required,number,min=1"`
+	StoryID string `json:"story_id" validate:"required,min=1"`
+}

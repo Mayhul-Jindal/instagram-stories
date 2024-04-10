@@ -62,9 +62,9 @@ func apiFnHandler(apiFn apiFn) http.HandlerFunc {
 		switch err {
 		case ErrNotAuthorized, ErrNoAuthHeader, ErrInvalidAuthHeader, ErrUnsupportedAuthType, ErrTokenExpired, ErrInvalidKeySize, ErrInvalidToken:
 			writeJSON(r.Context(), w, http.StatusUnauthorized, ApiError{Error: err.Error()})
-
-		// todo better status code ?
-		case ErrUserAlreadyExists, ErrUserAlreayFollowed, ErrCannotFollowSelf, ErrUserDoesNotExist:
+		
+		// currenty majority throughs bad request but can be changed later
+		case ErrUserAlreadyExists, ErrUserAlreayFollowed, ErrCannotFollowSelf, ErrUserDoesNotExist, ErrInvalidStoryID, ErrStoryNotFound, ErrStoryAlreadyWatched:
 			writeJSON(r.Context(), w, http.StatusBadRequest, ApiError{Error: err.Error()})
 
 		case ErrUserIdMissing, ErrBadRequest:

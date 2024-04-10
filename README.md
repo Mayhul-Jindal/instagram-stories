@@ -11,6 +11,7 @@
 
 - After reading about snapchat snaps and how they built snapDB, `redis(storing timeline data) along with mongodb(storiing stories)` can be a good combination.
 
+> Would love to have a on call discussion about the code if possible
 
 # Steps to run
 - `docker-compose up` to start the services

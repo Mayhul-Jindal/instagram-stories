@@ -3,7 +3,6 @@ package mongodb
 import (
 	"context"
 	"errors"
-	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -21,9 +20,6 @@ type Querier interface {
 	RemoveStoryFromUserTimeline(ctx context.Context, userID int64, storyID primitive.ObjectID) (int64, error)
 }
 
-// Interface can be made if we want to have a common method for all the databases with same functionality as Mongo.
-// Also inteface can be useful if want to add onion layers on top of this mongo layer (logging, metrics, ..etc)
-// Currently no such requirement thus going with struct.
 type mongodb struct {
 	db *mongo.Database
 }
@@ -53,8 +49,6 @@ func (m *mongodb) CreateStory(ctx context.Context, story Story) (primitive.Objec
 		return primitive.NilObjectID, err
 	}
 
-	// The inserted ID is an interface{}, so we'll need to type assert it to
-	// an ObjectID.
 	oid, ok := resp.InsertedID.(primitive.ObjectID)
 	if !ok {
 		return primitive.NilObjectID, errors.New("cannot convert to ObjectID")
@@ -85,7 +79,7 @@ func (m *mongodb) GetStoryById(ctx context.Context, storyID primitive.ObjectID) 
 const TimelineCollection = "TimelineCollection"
 
 type UserTimelineData struct {
-	UserID int64              `bson:"user_id,omitempty"`
+	UserID    int64              `bson:"user_id,omitempty"`
 	StoryID   primitive.ObjectID `bson:"story_id,omitempty"`
 	CreatedAt time.Time          `bson:"created_at,omitempty"`
 }
@@ -97,22 +91,20 @@ type UserTimeline struct {
 
 // create timeline document
 func (m *mongodb) CreateUserTimeline(ctx context.Context, userTimeline UserTimeline) error {
-	resp, err := m.db.Collection(TimelineCollection).InsertOne(ctx, userTimeline)
+	_, err := m.db.Collection(TimelineCollection).InsertOne(ctx, userTimeline)
 	if err != nil {
 		return err
 	}
 
-	log.Println("Inserted timeline document with ID:", resp.InsertedID)
 	return nil
 }
 
 func (m *mongodb) UpdateTimelineOfFollowers(ctx context.Context, userIDs []int64, userTimelineData UserTimelineData) error {
-	resp, err := m.db.Collection(TimelineCollection).UpdateMany(ctx, primitive.D{{Key: "user_id", Value: primitive.D{{Key: "$in", Value: userIDs}}}}, primitive.D{{Key: "$push", Value: primitive.D{{Key: "timeline", Value: userTimelineData}}}})
+	_, err := m.db.Collection(TimelineCollection).UpdateMany(ctx, primitive.D{{Key: "user_id", Value: primitive.D{{Key: "$in", Value: userIDs}}}}, primitive.D{{Key: "$push", Value: primitive.D{{Key: "timeline", Value: userTimelineData}}}})
 	if err != nil {
 		return err
 	}
 
-	log.Println("Updated timeline document with ID:", resp.UpsertedID)
 	return nil
 }
 
@@ -146,14 +138,5 @@ func (m *mongodb) RemoveStoryFromUserTimeline(ctx context.Context, userID int64,
 		return 0, err
 	}
 
-	log.Printf("Removed %d documents\n", resp.ModifiedCount)
-	log.Println("matched count", resp.MatchedCount)
-
 	return resp.ModifiedCount, nil
 }
-
-// for debugging purposes
-
-// func (m *Mongodb) GetStory(ctx context.Context)            {}
-// func (m *Mongodb) UpdateStoryTimeline(ctx context.Context) {}
-// func (m *Mongodb) GetStoryTimeline(ctx context.Context)    {}

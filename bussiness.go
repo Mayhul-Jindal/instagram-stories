@@ -102,11 +102,6 @@ func (b *bussiness) GetFollowersProfiles(ctx context.Context, userID int64, limi
 	return resp, nil
 }
 
-/*
-1. mongo mein ekh story update kardo ok
-2. Get all your followers id
-3. call update timeline
-*/
 func (b *bussiness) CreateStory(ctx context.Context, userID int64, data string, date time.Time) error {
 	storyID, err := b.mongo.CreateStory(ctx, mongodb.Story{
 		UserID:    userID,

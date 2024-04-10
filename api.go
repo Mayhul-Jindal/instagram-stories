@@ -15,7 +15,7 @@ type api struct {
 	bussiness  Bussiness
 }
 
-func NewAPI(listenAddr string, token Token, auth Auther, validator *validator.Validate, bussiness  Bussiness) *api {
+func NewAPI(listenAddr string, token Token, auth Auther, validator *validator.Validate, bussiness Bussiness) *api {
 	return &api{
 		listenAddr: listenAddr,
 		token:      token,
@@ -30,9 +30,6 @@ func (a *api) Run() error {
 
 	r.Get("/health", apiFnHandler(a.health))
 
-
-	
-	// todo test it
 	r.Post("/signup", apiFnHandler(a.signup))
 	r.Post("/login", apiFnHandler(a.login))
 
@@ -41,10 +38,9 @@ func (a *api) Run() error {
 	r.Get("/following", apiFnHandler(a.verifyTokenMiddleware(a.getFollowing)))
 	r.Get("/followers", apiFnHandler(a.verifyTokenMiddleware(a.getFollowers)))
 
-	// todo create story, get story
 	r.Post("/story/create", apiFnHandler(a.verifyTokenMiddleware(a.createStory)))
 	r.Get("/story/get-timeline", apiFnHandler(a.verifyTokenMiddleware(a.getStoriesTimeline)))
 	r.Get("/story/watch", apiFnHandler(a.verifyTokenMiddleware(a.watchStory)))
+
 	return http.ListenAndServe(a.listenAddr, r)
 }
-

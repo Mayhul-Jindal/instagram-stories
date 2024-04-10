@@ -134,11 +134,6 @@ func (a *api) getFollowers(w http.ResponseWriter, r *http.Request) (any, error) 
 	return resp, nil
 }
 
-type CreateStoryRequest struct {
-	UserID int64  `json:"user_id" validate:"required,number,min=1"`
-	Data   string `json:"data" validate:"required,min=5"`
-}
-
 func (a *api) createStory(w http.ResponseWriter, r *http.Request) (any, error) {
 	var req CreateStoryRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
@@ -159,10 +154,6 @@ func (a *api) createStory(w http.ResponseWriter, r *http.Request) (any, error) {
 	return map[string]string{"status": "ok"}, nil
 }
 
-type GetStoriesTimelineRequest struct {
-	UserID int64 `json:"user_id" validate:"required,number,min=1"`
-}
-
 func (a *api) getStoriesTimeline(w http.ResponseWriter, r *http.Request) (any, error) {
 	var req GetStoriesTimelineRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
@@ -181,11 +172,6 @@ func (a *api) getStoriesTimeline(w http.ResponseWriter, r *http.Request) (any, e
 	}
 
 	return resp, nil
-}
-
-type WatchStoryRequest struct {
-	UserID  int64 `json:"user_id" validate:"required,number,min=1"`
-	StoryID string `json:"story_id" validate:"required,min=1"`
 }
 
 func (a *api) watchStory(w http.ResponseWriter, r *http.Request) (any, error) {
